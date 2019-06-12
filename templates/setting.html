@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Setting - Cisco Shift Click</title>
+</head>
+
+<body>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Shift Click</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Dashboard</span></a>
+                </li>
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                        aria-haspopup="true" aria-expanded="false">Queue</a>
+                    <div class="dropdown-menu">
+                        {% for i in returnData.queueNameList %}
+                        <a class="dropdown-item" href="/queue/{{ i }}/">{{i}}</a>
+                        {% endfor %}
+                    </div>
+                </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link" href="#">History</span></a>
+                </li> -->
+                <li> <a class="nav-link" data-toggle="collapse" href="#help" role="button" aria-expanded="false"
+                        aria-controls="help">
+                        How to
+                    </a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="./">Setting </a>
+                </li>
+        </div>
+        <ul class="navbar-nav navbar-right">
+            <li class="nav-item">
+                <a class="nav-link " href="mailto:yuxuliu@cisco.com">Open a case</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link ">CEC: {{ returnData.cecId }} {% if returnData.queueName %} Q:
+                    {{ returnData.queueName }} {% endif %}</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link " href="/logout">Logout</a>
+            </li>
+        </ul>
+    </nav>
+
+
+
+    <div class="container">
+        <div class="collapse" id="help" style="margin-top:15px">
+            <div class="alert alert-secondary" role="alert">
+                TEST:</br>
+                <code>
+                        DEMO1                    
+                    </br>DEMO2</code>
+            </div>
+        </div>
+
+
+
+        <div class="alert alert-secondary" role="alert" style="margin-top:15px">
+            Shift Click! Force on your case, rather than shift table.
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-secondary" role="alert" style="margin-top:15px">
+            <font color="red">{{ message }}</font>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <!-- {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alert alert-secondary" role="alert" style="margin-top:15px">
+            {% for message in messages %}
+            {{ message|safe }}
+        </div>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %} -->
+
+
+        <div class="row ">
+
+            <div class="col-sm-12 center-block">
+
+                <br>
+                <h3>
+                    <font color="red">{{ returnData.editQueueName }} </font>
+                </h3><br>
+                <h4>MEMBER:</h4><br>
+                <form action="" method="POST">
+                        
+
+                    <div class="form-row">
+                        <div class="col-sm">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01">CEC</label>
+                                </div>
+                                <input type="hidden" name="type" value="member">
+                                <select class="custom-select" name="editCec" onchange="memberOptionFunc()"
+                                    id="memberOption">
+                                    {% if returnData.editCec == None %}
+                                    <option value="None" selected></option>
+                                    {% else %}
+                                    <option></option>
+                                    {% endif %}
+                                    {% for i in returnData.memberList %}
+                                    {% if i ==returnData.editCec %}
+                                    <option value="{{i}}" selected>{{i}}</option>
+                                    {% else %}
+                                    <option value="{{i}}">{{i}}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01">STATUS</label>
+                                </div>
+                                <select class="custom-select" name="newStatus" id="inputGroupSelect01">
+                                    {% if  returnData.currentStatus ==None %}
+                                    <option selected> </option>
+                                    {% else %}
+                                    <option> </option>
+                                    {% endif %}
+                                    <option value="0" {% if returnData.currentStatus ==0 %}selected{% endif %}>ON
+                                    </option>
+                                    <option value="2" {% if returnData.currentStatus ==2 %}selected{% endif %}>
+                                        OFF(PTO/LEAVE)</option>
+                                    <option value="3" {% if returnData.currentStatus ==3 %}selected{% endif %}>WFH
+                                    </option>
+                                    <option value="4" {% if returnData.currentStatus ==4 %}selected{% endif %}>
+                                        MOBILE</option>
+                                    <option value="5" {% if returnData.currentStatus ==5 %}selected{% endif %}>OTHER
+                                    </option>
+                                    <option value="6" {% if returnData.currentStatus ==6 %}selected{% endif %}>
+                                        SHADOW</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01">SHIFT PLAN</label>
+                                </div>
+                                <input type="number" class="form-control" name="newShiftPlan" placeholder="default"
+                                    value="{{ returnData.currentShiftPlan }}">
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01">NOTE</label>
+                                </div>
+                                <input type="text" class="form-control" name="newNote" placeholder="Note here"
+                                    value="{% if returnData.cecNote %}{{ returnData.cecNote }} {% endif %}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <button type="submit" class="btn btn-outline-danger float-right">APPLY</button>
+                        </div>
+                    </div>
+                </form>
+
+                <h4>QUEUE:</h4><br>
+                <form action="" method="post">
+                        <input type="hidden" name="type" value="queue">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">CEC LIST (Order sensitive):</div>
+                                </div>
+                                <input type="text" class="form-control" name="cecList"
+                                    placeholder="cec1,cec2,cec3" value="{{ returnData.memberListStr }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-sm-6">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01">SHIFT PLAN</label>
+                                </div>
+                                <input type="text" class="form-control" name="queueShiftPlan" placeholder="Per-cec shift quantity"
+                                    value="{{returnData.shiftPlan}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="input-group ">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Announcement</span>
+                                </div>
+                                <textarea class="form-control " rows="4" aria-label="With textarea" name="announcement" 
+                                    placeholder="World peace">{{returnData.announcement}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <button type="submit" class="btn btn-outline-danger float-right">APPLY</button>
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+
+        </div>
+    </div>
+    </div>
+    <script>
+        function memberOptionFunc() {
+            var x = document.getElementById("memberOption").value;
+            document.location.href = './?editCec=' + x;
+        }
+    </script>
+
+</body>
+
+</html>
