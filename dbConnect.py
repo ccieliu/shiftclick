@@ -194,10 +194,10 @@ class backEnd(object):
                 if checkExistlastShiftDate() == True:
                     lastDayOnShiftEngineer = self.db.shiftInfo.find(
                         {"queueId": queueId, "shiftDate": queueInfoResult[0]["lastShiftDate"], "status": {"$ne": 2}})
-                    prunePointer = False
+                    prunePointer = True
                     for i in lastDayOnShiftEngineer:
-                        if i["took"] >= self.checkEngineerInfo(cecId=i["cecId"], infoName="cecShiftPlan"):
-                            prunePointer = True
+                        if i["took"] < self.checkEngineerInfo(cecId=i["cecId"], infoName="cecShiftPlan"):
+                            prunePointer = False
                     return(prunePointer)
             prunePointer = ifAllNoPtoCecInQueueFullShift()
 
